@@ -1,0 +1,12 @@
+target
+bin
+
+build
+.settings
+.classpath
+.project
+.idea
+
+.DS_Store
+*.iml
+/nbactions.xml
