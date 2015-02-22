@@ -30,13 +30,10 @@ public class AkkaIntegrationConfiguration {
     public ActorSystem actorSystem() {
 
         ActorSystem system = ActorSystem
-                .create("default-actor-system", akkaConfiguration());
+                .create("default-basic-system", akkaConfiguration());
         return system;
     }
 
-    public ActorContext actorPostProcessor() {
 
-        return new ActorContext();
-    }
 
 }

@@ -1,5 +1,6 @@
 package com.butakka.annotations;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +16,10 @@ import java.lang.annotation.Target;
 @Scope("prototype")
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@Lazy
 public @interface AkkaActor {
 
     String name() default "";
+
 }
 

@@ -1,18 +1,23 @@
-package com.butakka;
+package com.butakka.test.basic;
 
 import akka.actor.UntypedActor;
 import com.butakka.annotations.AkkaActor;
+import com.butakka.infrastructure.ActorContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by jefe on 21/02/15.
  */
-@AkkaActor(name = "HelloActor")
+@AkkaActor
 public class HelloActor extends UntypedActor {
+
+    @Autowired
+    private ActorContext context;
 
     @Override
     public void onReceive(Object message) throws Exception {
 
         String msg = (String) message;
-        System.out.println(msg);
+        getSender().tell("OK:" + message,getSelf());
     }
 }

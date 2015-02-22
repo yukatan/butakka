@@ -2,6 +2,7 @@ package com.butakka.infrastructure;
 
 import akka.actor.Actor;
 import akka.actor.IndirectActorProducer;
+import akka.actor.Props;
 import org.springframework.context.ApplicationContext;
 
 /**
