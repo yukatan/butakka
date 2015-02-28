@@ -1,9 +1,11 @@
-package com.butakka.infrastructure;
+package com.butakka.infrastructure.context;
 
 import akka.actor.*;
 import com.butakka.annotations.AkkaActor;
 import com.butakka.error.ActorTypeNotFoundException;
+import com.butakka.infrastructure.configurer.ActorConfigurer;
 import com.butakka.infrastructure.extension.SpringExtension;
+import com.butakka.infrastructure.routing.RoutingActorConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -22,6 +24,9 @@ public class DefaultAkkaContext implements AkkaContext {
     @Autowired
     private ApplicationContext context;
 
+    @Autowired
+    private RoutingActorConfigurer configurer;
+
     private Map<Class,Props> actorProducers = new HashMap<Class, Props>();
 
     @PostConstruct
@@ -32,10 +37,13 @@ public class DefaultAkkaContext implements AkkaContext {
 
             Class actorType = context.getType(name);
             Props producer = SpringExtension.SpringExtProvider.get(system).props(actorType);
+            if(configurer.isConfigurableBy(actorType))
+                producer = configurer.configure(actorType,producer);
             actorProducers.put(actorType, producer);
         }
     }
 
+    @Override
     public ActorRef getActorRef(Class actorType){
 
         Props props = actorProducers.get(actorType);
@@ -43,29 +51,34 @@ public class DefaultAkkaContext implements AkkaContext {
 
     }
 
-    public ActorRef getActorRef(Class actorType,String name){
+    @Override
+    public ActorRef getActorRef(Class actorType, String name){
 
         Props props = actorProducers.get(actorType);
         if(props == null)
             throw new ActorTypeNotFoundException(actorType.getCanonicalName());
         return system.actorOf(props,name);
     }
-    public ActorRef getActorRef(Class actorType,UntypedActorContext context){
+    @Override
+    public ActorRef getActorRef(Class actorType, UntypedActorContext context){
 
         Props props = actorProducers.get(actorType);
         return context.actorOf(props);
     }
 
-    public ActorRef getActorRef(Class actorType,UntypedActorContext context,String name){
+    @Override
+    public ActorRef getActorRef(Class actorType, UntypedActorContext context, String name){
 
         Props props = actorProducers.get(actorType);
         return system.actorOf(props,name);
     }
 
+    @Override
     public ActorSystem getSystem() {
         return system;
     }
 
+    @Override
     public Props getActorProps(Class actorType){
 
         return actorProducers.get(actorType);

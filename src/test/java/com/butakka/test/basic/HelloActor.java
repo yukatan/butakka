@@ -2,7 +2,7 @@ package com.butakka.test.basic;
 
 import akka.actor.UntypedActor;
 import com.butakka.annotations.AkkaActor;
-import com.butakka.infrastructure.AkkaContext;
+import com.butakka.infrastructure.context.AkkaContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

@@ -1,4 +1,4 @@
-package com.butakka.infrastructure;
+package com.butakka.infrastructure.producer;
 
 import akka.actor.Actor;
 import akka.actor.IndirectActorProducer;

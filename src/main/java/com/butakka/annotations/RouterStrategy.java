@@ -1,7 +1,6 @@
 package com.butakka.annotations;
 
-import akka.routing.NoRouter;
-import akka.routing.RouterConfig;
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,12 +8,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by jefe on 22/02/15.
+ * Created by Jesus Barquín on 28/02/15.
  */
+@Component
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface WithRouter {
+public @interface RouterStrategy {
 
-    Class<? extends RouterConfig> value() default NoRouter.class;
-    int instances() default 1;
+    Class value();
 }

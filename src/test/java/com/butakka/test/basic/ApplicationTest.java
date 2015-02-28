@@ -3,7 +3,7 @@ package com.butakka.test.basic;
 import akka.actor.ActorRef;
 import akka.testkit.JavaTestKit;
 import com.butakka.config.AkkaIntegrationConfiguration;
-import com.butakka.infrastructure.DefaultAkkaContext;
+import com.butakka.infrastructure.context.DefaultAkkaContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
