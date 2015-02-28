@@ -2,7 +2,7 @@ package com.butakka.test.basic;
 
 import akka.actor.UntypedActor;
 import com.butakka.annotations.AkkaActor;
-import com.butakka.infrastructure.ActorContext;
+import com.butakka.infrastructure.AkkaContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class HelloActor extends UntypedActor {
 
     @Autowired
-    private ActorContext context;
+    private AkkaContext context;
 
     @Override
     public void onReceive(Object message) throws Exception {

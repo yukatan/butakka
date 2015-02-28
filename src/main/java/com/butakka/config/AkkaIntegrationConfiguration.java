@@ -1,11 +1,15 @@
 package com.butakka.config;
 
 import akka.actor.ActorSystem;
+import akka.actor.ExtendedActorSystem;
 import com.butakka.annotations.EnableAkkaIntegration;
-import com.butakka.infrastructure.ActorContext;
+import com.butakka.infrastructure.AkkaContext;
+import com.butakka.infrastructure.extension.SpringExtension;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -14,11 +18,14 @@ import org.springframework.context.annotation.Bean;
 @ConditionalOnClass(EnableAkkaIntegration.class)
 public class AkkaIntegrationConfiguration {
 
+    @Autowired
+    private ApplicationContext context;
+
 
     @Bean
-    private ActorContext actorContext(){
+    private AkkaContext actorContext(){
 
-        return new ActorContext();
+        return new AkkaContext();
     }
 
     @Bean
@@ -31,6 +38,7 @@ public class AkkaIntegrationConfiguration {
 
         ActorSystem system = ActorSystem
                 .create("default-basic-system", akkaConfiguration());
+        SpringExtension.SpringExtProvider.createExtension((ExtendedActorSystem)system).initialize(context);
         return system;
     }
 

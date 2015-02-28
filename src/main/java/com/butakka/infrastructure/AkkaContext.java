@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by jefe on 21/02/15.
  */
-public class ActorContext implements Extension {
+public class AkkaContext implements Extension {
 
     @Autowired
     private ActorSystem system;
