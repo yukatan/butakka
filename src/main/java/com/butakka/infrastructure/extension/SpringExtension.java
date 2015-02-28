@@ -8,7 +8,7 @@ import akka.actor.AbstractExtensionId;
 import akka.actor.ExtendedActorSystem;
 import akka.actor.Extension;
 import akka.actor.Props;
-import com.butakka.infrastructure.DefaultActorProducer;
+import com.butakka.infrastructure.producer.DefaultActorProducer;
 import org.springframework.context.ApplicationContext;
 
 public class SpringExtension extends AbstractExtensionId<SpringExtension.SpringExt> {
@@ -31,8 +31,7 @@ public class SpringExtension extends AbstractExtensionId<SpringExtension.SpringE
         }
 
         public Props props(Class actorType) {
-            return Props.create(DefaultActorProducer.class,
-                    applicationContext, actorType);
+            return Props.create(DefaultActorProducer.class,applicationContext, actorType);
         }
     }
 }
