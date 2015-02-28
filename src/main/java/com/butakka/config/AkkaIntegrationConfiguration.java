@@ -4,6 +4,7 @@ import akka.actor.ActorSystem;
 import akka.actor.ExtendedActorSystem;
 import com.butakka.annotations.EnableAkkaIntegration;
 import com.butakka.infrastructure.AkkaContext;
+import com.butakka.infrastructure.DefaultAkkaContext;
 import com.butakka.infrastructure.extension.SpringExtension;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -25,7 +26,7 @@ public class AkkaIntegrationConfiguration {
     @Bean
     private AkkaContext actorContext(){
 
-        return new AkkaContext();
+        return new DefaultAkkaContext();
     }
 
     @Bean
@@ -38,7 +39,7 @@ public class AkkaIntegrationConfiguration {
 
         ActorSystem system = ActorSystem
                 .create("default-basic-system", akkaConfiguration());
-        SpringExtension.SpringExtProvider.createExtension((ExtendedActorSystem)system).initialize(context);
+        SpringExtension.SpringExtProvider.get(system).initialize(context);
         return system;
     }
 

@@ -3,7 +3,7 @@ package com.butakka.test.router;
 import akka.actor.ActorRef;
 import akka.testkit.JavaTestKit;
 import com.butakka.config.AkkaIntegrationConfiguration;
-import com.butakka.infrastructure.AkkaContext;
+import com.butakka.infrastructure.DefaultAkkaContext;
 import com.butakka.test.router.actors.RouterActorRoundRobinPool;
 import org.junit.After;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class RouterTest {
     }
 
     @Autowired
-    private AkkaContext context;
+    private DefaultAkkaContext context;
 
     @Test
     public void TestThatTheRouterWorks() throws Exception {

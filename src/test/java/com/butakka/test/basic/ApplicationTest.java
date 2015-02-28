@@ -3,7 +3,7 @@ package com.butakka.test.basic;
 import akka.actor.ActorRef;
 import akka.testkit.JavaTestKit;
 import com.butakka.config.AkkaIntegrationConfiguration;
-import com.butakka.infrastructure.AkkaContext;
+import com.butakka.infrastructure.DefaultAkkaContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class ApplicationTest {
     }
 
     @Autowired
-    private AkkaContext context;
+    private DefaultAkkaContext context;
 
     @Test
     public void TestThatTheActorSystemWorks() throws Exception {
