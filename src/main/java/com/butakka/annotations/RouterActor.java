@@ -1,5 +1,8 @@
 package com.butakka.annotations;
 
+import akka.routing.NoRouter;
+import akka.routing.RouterConfig;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -9,15 +12,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by jefe on 21/02/15.
+ * Created by Jesus Barquín on 8/03/15.
  */
-@Component
-@Scope("prototype")
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AkkaActor {
+@Component
+@Scope("prototype")
+@Lazy
+public @interface RouterActor {
 
-    String value();
+    String actorId();
+    Class<? extends RouterConfig> value() default NoRouter.class;
+    int instances() default 1;
 
 }
 

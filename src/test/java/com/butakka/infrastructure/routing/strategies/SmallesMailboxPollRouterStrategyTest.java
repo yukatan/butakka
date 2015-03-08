@@ -4,14 +4,13 @@ import akka.routing.SmallestMailboxPool;
 import akka.testkit.TestActorRef;
 import com.butakka.config.AkkaIntegrationConfiguration;
 import com.butakka.infrastructure.context.AkkaContext;
-import com.butakka.test.actors.SmallInboxPoolActor;
-import com.butakka.test.actors.SmallInboxPoolActorWithInstancesSet;
-import com.butakka.test.config.ActorTestConfig;
+import test.actors.SmallInboxPoolActor;
+import test.config.ActorTestConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -20,8 +19,8 @@ import static org.junit.Assert.assertEquals;
  * Created by Jesus Barquín on 28/02/15.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {AkkaIntegrationConfiguration.class, ActorTestConfig.class})
-@DirtiesContext
+@SpringApplicationConfiguration(classes = {ActorTestConfig.class,AkkaIntegrationConfiguration.class})
+@ActiveProfiles("test")
 public class SmallesMailboxPollRouterStrategyTest {
 
     @Autowired
@@ -31,7 +30,7 @@ public class SmallesMailboxPollRouterStrategyTest {
     @Test
     public void TheRouterConfigShouldBeSmallestMailboxPool() throws Exception {
 
-        TestActorRef ref = TestActorRef.create(context.getSystem(),context.getActorProps(SmallInboxPoolActor.class));
+        TestActorRef ref = TestActorRef.create(context.getSystem(),context.getActorProps("small-inbox-pool-actor"));
         assertEquals(ref.underlyingActor().context().props().routerConfig().getClass(),SmallestMailboxPool.class);
 
     }
@@ -39,19 +38,12 @@ public class SmallesMailboxPollRouterStrategyTest {
     @Test
     public void TheRouterConfigInstancesShouldBeDefault() throws Exception {
 
-        TestActorRef ref = TestActorRef.create(context.getSystem(),context.getActorProps(SmallInboxPoolActor.class));
+        TestActorRef ref = TestActorRef.create(context.getSystem(),context.getActorProps("small-inbox-pool-actor"));
         SmallestMailboxPool pool = (SmallestMailboxPool) ref.underlyingActor().context().props().routerConfig();
         assertEquals(1,pool.nrOfInstances());
 
     }
 
-    @Test
-    public void TheRouterConfigInstancesShouldBe5() throws Exception {
 
-        TestActorRef ref = TestActorRef.create(context.getSystem(),context.getActorProps(SmallInboxPoolActorWithInstancesSet.class));
-        SmallestMailboxPool pool = (SmallestMailboxPool) ref.underlyingActor().context().props().routerConfig();
-        assertEquals(5,pool.nrOfInstances());
-
-    }
 
 }

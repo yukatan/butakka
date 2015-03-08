@@ -1,75 +1,69 @@
 package com.butakka.infrastructure.context;
 
 import akka.actor.*;
-import com.butakka.annotations.AkkaActor;
-import com.butakka.error.ActorTypeNotFoundException;
-import com.butakka.infrastructure.configurer.ActorConfigurer;
-import com.butakka.infrastructure.extension.SpringExtension;
-import com.butakka.infrastructure.routing.RoutingActorConfigurer;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by Jesús Barquín on 21/02/15.
  */
-public class DefaultAkkaContext implements AkkaContext {
+@Component
+public class DefaultAkkaContext implements AkkaContext ,BeanPostProcessor {
 
     @Autowired
     private ActorSystem system;
 
     @Autowired
-    private ApplicationContext context;
+    private ActorDefinerContext definerContainer;
 
     @Autowired
-    private RoutingActorConfigurer configurer;
+    private ActorPropsContext actorPropsContext;
 
-    private Map<Class,Props> actorProducers = new HashMap<Class, Props>();
 
-    @PostConstruct
-    public void processActors(){
-
-        String[] actorNames = context.getBeanNamesForAnnotation(AkkaActor.class);
-        for(String name : actorNames){
-
-            Class actorType = context.getType(name);
-            Props producer = SpringExtension.SpringExtProvider.get(system).props(actorType);
-            if(configurer.isConfigurableBy(actorType))
-                producer = configurer.configure(actorType,producer);
-            actorProducers.put(actorType, producer);
-        }
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String name) throws BeansException {
+        return bean;
     }
 
     @Override
-    public ActorRef getActorRef(Class actorType){
+    public Object postProcessAfterInitialization(Object bean, String name) throws BeansException {
+        return bean;
+    }
 
-        Props props = actorProducers.get(actorType);
+    @Override
+    public ActorRef getActorRef(String actorId){
+
+        checkActor(actorId);
+        Props props = actorPropsContext.getProps(actorId);
         return system.actorOf(props);
 
     }
 
-    @Override
-    public ActorRef getActorRef(Class actorType, String name){
 
-        Props props = actorProducers.get(actorType);
-        if(props == null)
-            throw new ActorTypeNotFoundException(actorType.getCanonicalName());
+    @Override
+    public ActorRef getActorRef(String actorId, String name){
+
+        checkActor(actorId);
+        Props props = actorPropsContext.getProps(actorId);
         return system.actorOf(props,name);
     }
-    @Override
-    public ActorRef getActorRef(Class actorType, UntypedActorContext context){
 
-        Props props = actorProducers.get(actorType);
+    @Override
+    public ActorRef getActorRef(String actorId, UntypedActorContext context){
+
+        checkActor(actorId);
+        Props props = actorPropsContext.getProps(actorId);
         return context.actorOf(props);
     }
 
-    @Override
-    public ActorRef getActorRef(Class actorType, UntypedActorContext context, String name){
 
-        Props props = actorProducers.get(actorType);
+    @Override
+    public ActorRef getActorRef(String actorId, UntypedActorContext context, String name){
+
+        checkActor(actorId);
+        Props props = actorPropsContext.getProps(actorId);
         return system.actorOf(props,name);
     }
 
@@ -78,9 +72,20 @@ public class DefaultAkkaContext implements AkkaContext {
         return system;
     }
 
-    @Override
-    public Props getActorProps(Class actorType){
 
-        return actorProducers.get(actorType);
+    @Override
+    public Props getActorProps(String actorId){
+
+        checkActor(actorId);
+        return actorPropsContext.getProps(actorId);
+
+    }
+
+    private void checkActor(String actorId){
+
+//        if(!actorProps.containsKey(actorId));
+//            instanciateProps(actorId);
+//        if(!actorProps.containsKey(actorId))
+//            throw new ActorIdNotFoundException(actorId);
     }
 }

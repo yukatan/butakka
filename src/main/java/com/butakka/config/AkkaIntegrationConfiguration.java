@@ -2,10 +2,7 @@ package com.butakka.config;
 
 import akka.actor.ActorSystem;
 import com.butakka.annotations.EnableAkkaIntegration;
-import com.butakka.infrastructure.context.AkkaContext;
-import com.butakka.infrastructure.context.DefaultAkkaContext;
 import com.butakka.infrastructure.extension.SpringExtension;
-import com.butakka.infrastructure.routing.RoutingActorConfigurer;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +23,6 @@ public class AkkaIntegrationConfiguration {
 
 
     @Bean
-    private AkkaContext actorContext(){
-
-        return new DefaultAkkaContext();
-    }
-
-    @Bean
     public Config akkaConfiguration() {
         return ConfigFactory.load();
     }
@@ -45,10 +36,4 @@ public class AkkaIntegrationConfiguration {
         return system;
     }
 
-
-    @Bean
-    public RoutingActorConfigurer routingActorConfigurer(){
-
-        return new RoutingActorConfigurer();
-    }
 }

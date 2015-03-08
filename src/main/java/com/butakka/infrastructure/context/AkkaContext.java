@@ -9,15 +9,16 @@ import akka.actor.UntypedActorContext;
  * Created by Jesus Barquín on 28/02/15.
  */
 public interface AkkaContext {
-    ActorRef getActorRef(Class actorType);
 
-    ActorRef getActorRef(Class actorType, String name);
+    ActorRef getActorRef(String actorId);
 
-    ActorRef getActorRef(Class actorType, UntypedActorContext context);
+    ActorRef getActorRef(String actorId, String name);
 
-    ActorRef getActorRef(Class actorType, UntypedActorContext context, String name);
+    ActorRef getActorRef(String actorId, UntypedActorContext context);
+
+    ActorRef getActorRef(String actorId, UntypedActorContext context, String name);
 
     ActorSystem getSystem();
 
-    Props getActorProps(Class actorType);
+    Props getActorProps(String actorId);
 }
